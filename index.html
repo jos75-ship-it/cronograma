@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma — 7º Período de Medicina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F6F3;
+    --paper-raised:#FFFFFF;
+    --ink:#16263B;
+    --ink-soft:#4A5A6E;
+    --line:#DCE2DE;
+    --fixed:#16263B;
+    --fixed-tint:#EDEFF3;
+    --estagio:#2E7D53;
+    --estagio-tint:#E5F2EA;
+    --pendente:#B4791E;
+    --pendente-tint:#FBF0DF;
+    --sat:#7B4B9E;
+    --sat-tint:#F2E9F7;
+    --shadow: 0 1px 2px rgba(22,38,59,0.04), 0 6px 20px rgba(22,38,59,0.06);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(22,38,59,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 20px 80px;
+    min-height:100vh;
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:28px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--estagio);
+    font-weight:600;
+  }
+  h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:clamp(28px, 4vw, 40px);
+    margin:2px 0 4px;
+    letter-spacing:-0.01em;
+  }
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:640px;
+    line-height:1.5;
+  }
+
+  /* pulse divider — ECG motif, used once */
+  .pulse{
+    width:100%;
+    height:26px;
+    margin-top:16px;
+  }
+  .pulse svg{width:100%;height:100%;display:block;}
+  .pulse path{
+    fill:none;
+    stroke:var(--estagio);
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    opacity:0.55;
+  }
+
+  /* ---------- Legend ---------- */
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-bottom:28px;
+    font-size:13px;
+  }
+  .legend-item{display:flex;align-items:center;gap:8px;color:var(--ink-soft);}
+  .swatch{width:11px;height:11px;border-radius:3px;flex:none;}
+  .swatch.fixed{background:var(--fixed);}
+  .swatch.estagio{background:var(--estagio);}
+  .swatch.pendente{background:var(--pendente);}
+  .swatch.sat{background:var(--sat);}
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    display:flex;
+    gap:4px;
+    margin-bottom:24px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+  }
+  .tab{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    background:transparent;
+    border:none;
+    padding:11px 16px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    position:relative;
+    top:1px;
+    border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab:hover{color:var(--ink);}
+  .tab.active{color:var(--ink); border-bottom-color:var(--estagio); font-weight:600;}
+  .tab:focus-visible, button:focus-visible{outline:2px solid var(--estagio); outline-offset:2px;}
+
+  /* ---------- Week grid ---------- */
+  .week{display:none;}
+  .week.active{display:block; animation:fade .3s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .week-label{
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:17px;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:14px;
+  }
+  .grid.single-col{grid-template-columns:minmax(220px, 340px);}
+
+  .day-col{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .day-name{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink);
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding-bottom:8px;
+    border-bottom:1px dashed var(--line);
+  }
+  .day-date{color:var(--ink-soft); font-weight:400;}
+
+  .block{
+    border-left:3px solid var(--fixed);
+    background:var(--fixed-tint);
+    border-radius:0 6px 6px 0;
+    padding:8px 10px;
+  }
+  .block.estagio{border-left-color:var(--estagio); background:var(--estagio-tint);}
+  .block.pendente{border-left-color:var(--pendente); background:var(--pendente-tint);}
+  .block.sat{border-left-color:var(--sat); background:var(--sat-tint);}
+
+  .block-time{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:2px;
+  }
+  .block-title{
+    font-size:13.5px;
+    font-weight:600;
+    line-height:1.3;
+    margin-bottom:1px;
+  }
+  .block-loc{
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .block-tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    margin-top:5px;
+    color:var(--estagio);
+    font-weight:600;
+  }
+  .block.pendente .block-tag{color:var(--pendente);}
+
+  footer{
+    margin-top:36px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  footer strong{color:var(--ink);}
+
+  @media (max-width: 900px){
+    .grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width: 600px){
+    .grid{grid-template-columns:1fr;}
+    body{padding:24px 14px 60px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .week.active{animation:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">7º Período · Medicina · Sala 7 · 2026/2</span>
+    <h1>Meu Cronograma Semanal</h1>
+    <p class="subtitle">Aulas fixas (teóricas e Farmacologia III) cruzadas com os estágios móveis dos grupos C e C1 — agosto de 2026.</p>
+    <div class="pulse">
+      <svg viewBox="0 0 1160 26" preserveAspectRatio="none">
+        <path d="M0,13 L260,13 L280,4 L300,22 L320,13 L1160,13"/>
+      </svg>
+    </div>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><span class="swatch fixed"></span>Aula fixa (teórica / Farmacologia)</div>
+    <div class="legend-item"><span class="swatch estagio"></span>Estágio (da folha)</div>
+    <div class="legend-item"><span class="swatch sat"></span>Reposição avulsa</div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-week="w0">Sáb 08/08</button>
+    <button class="tab" data-week="w1">10–14 Ago</button>
+    <button class="tab" data-week="w2">17–21 Ago</button>
+    <button class="tab" data-week="w3">24–28 Ago</button>
+  </div>
+
+  <!-- SÁBADO AVULSO -->
+  <section class="week active" id="w0">
+    <p class="week-label">Reposição fora do padrão semanal</p>
+    <div class="grid single-col">
+      <div class="day-col">
+        <div class="day-name">Sábado <span class="day-date">08/08</span></div>
+        <div class="block sat">
+          <div class="block-time">08h – 10h</div>
+          <div class="block-title">Oftalmologia</div>
+          <div class="block-loc">HOC</div>
+          <span class="block-tag">Estágio · reposição</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEMANA 10-14 -->
+  <section class="week" id="w1">
+    <p class="week-label">Semana de 10 a 14 de agosto</p>
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">10/08</span></div>
+        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">10:00 – 12:30</div><div class="block-title">Prática Cl. Cirúrgica III</div><div class="block-loc">Lab. Tec. Cirurgia</div></div>
+        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10 – 18:40</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">11/08</span></div>
+        <div class="block estagio"><div class="block-time">07:00 – 09:30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">Stella Maris</div><span class="block-tag">Estágio</span></div>
+        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">12/08</span></div>
+        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00 – 17:50</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">13/08</span></div>
+        <div class="block estagio"><div class="block-time">08:00 – 12:00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">MEDVIDA</div><span class="block-tag">Estágio · grupo C</span></div>
+        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">14/08</span></div>
+        <div class="block"><div class="block-time">10:50 – 12:30</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEMANA 17-21 -->
+  <section class="week" id="w2">
+    <p class="week-label">Semana de 17 a 21 de agosto</p>
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">17/08</span></div>
+        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">10:00 – 12:30</div><div class="block-title">Prática Cl. Cirúrgica III</div><div class="block-loc">Lab. Tec. Cirurgia</div></div>
+        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10 – 18:40</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">18/08</span></div>
+        <div class="block estagio"><div class="block-time">07:00 – 12:00</div><div class="block-title">Clínica Cirúrgica III</div><div class="block-loc">HRLN</div><span class="block-tag">Estágio</span></div>
+        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">19/08</span></div>
+        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00 – 17:50</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">20/08</span></div>
+        <div class="block estagio"><div class="block-time">08:00 – 12:00</div><div class="block-title">Pediatria I</div><div class="block-loc">UBS Golfinhos</div><span class="block-tag">Estágio</span></div>
+        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">21/08</span></div>
+        <div class="block"><div class="block-time">10:50 – 12:30</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEMANA 24-28 -->
+  <section class="week" id="w3">
+    <p class="week-label">Semana de 24 a 28 de agosto</p>
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">24/08</span></div>
+        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">10:00 – 12:30</div><div class="block-title">Prática Cl. Cirúrgica III</div><div class="block-loc">Lab. Tec. Cirurgia</div></div>
+        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10 – 18:40</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">25/08</span></div>
+        <div class="block estagio"><div class="block-time">07:00 – 12:00</div><div class="block-title">Neurologia</div><div class="block-loc">HRLN</div><span class="block-tag">Estágio</span></div>
+        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">26/08</span></div>
+        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">10:00 – 13:00</div><div class="block-title">Urologia</div><div class="block-loc">Stella Maris</div><span class="block-tag">Estágio</span></div>
+        <div class="block"><div class="block-time">15:00 – 17:50</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">27/08</span></div>
+        <div class="block estagio"><div class="block-time">08:00 – 12:00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">HRLN</div><span class="block-tag">Estágio</span></div>
+        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">28/08</span></div>
+        <div class="block"><div class="block-time">10:50 – 12:30</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Nota:</strong> os estágios em verde são exatamente os da folha de estágios móveis. Nas semanas/dias em que a folha não indica nada, você não tem estágio naquele horário — só as aulas fixas do quadro. Se surgir uma nova folha com mais datas, é só me passar que eu atualizo aqui.
+  </footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.week').forEach(w => w.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.week).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
