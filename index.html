@@ -17,10 +17,11 @@
     --fixed-tint:#EDEFF3;
     --estagio:#2E7D53;
     --estagio-tint:#E5F2EA;
-    --pendente:#B4791E;
-    --pendente-tint:#FBF0DF;
     --sat:#7B4B9E;
     --sat-tint:#F2E9F7;
+    --gc:#8A5A2B;
+    --gc1:#2E6C7D;
+    --gc12:#B4791E;
     --shadow: 0 1px 2px rgba(22,38,59,0.04), 0 6px 20px rgba(22,38,59,0.06);
   }
 
@@ -28,209 +29,106 @@
   html,body{margin:0;padding:0;}
   body{
     background:var(--paper);
-    background-image:
-      radial-gradient(circle at 1px 1px, rgba(22,38,59,0.05) 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px, rgba(22,38,59,0.05) 1px, transparent 0);
     background-size: 22px 22px;
     color:var(--ink);
     font-family:'IBM Plex Sans', sans-serif;
     padding: 40px 20px 80px;
     min-height:100vh;
   }
-
   .wrap{max-width:1180px;margin:0 auto;}
 
-  /* ---------- Header ---------- */
   header{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-bottom:28px;
-    padding-bottom:22px;
+    display:flex; flex-direction:column; gap:6px;
+    margin-bottom:28px; padding-bottom:22px;
     border-bottom:1px solid var(--line);
   }
   .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--estagio);
-    font-weight:600;
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--estagio); font-weight:600;
   }
   h1{
-    font-family:'Source Serif 4', serif;
-    font-weight:700;
-    font-size:clamp(28px, 4vw, 40px);
-    margin:2px 0 4px;
-    letter-spacing:-0.01em;
+    font-family:'Source Serif 4', serif; font-weight:700;
+    font-size:clamp(28px, 4vw, 40px); margin:2px 0 4px; letter-spacing:-0.01em;
   }
-  .subtitle{
-    color:var(--ink-soft);
-    font-size:15px;
-    max-width:640px;
-    line-height:1.5;
-  }
+  .subtitle{ color:var(--ink-soft); font-size:15px; max-width:680px; line-height:1.5; }
 
-  /* pulse divider — ECG motif, used once */
-  .pulse{
-    width:100%;
-    height:26px;
-    margin-top:16px;
-  }
+  .pulse{ width:100%; height:26px; margin-top:16px; }
   .pulse svg{width:100%;height:100%;display:block;}
-  .pulse path{
-    fill:none;
-    stroke:var(--estagio);
-    stroke-width:1.6;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    opacity:0.55;
-  }
+  .pulse path{ fill:none; stroke:var(--estagio); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; opacity:0.55; }
 
-  /* ---------- Legend ---------- */
-  .legend{
-    display:flex;
-    flex-wrap:wrap;
-    gap:18px;
-    margin-bottom:28px;
-    font-size:13px;
-  }
+  .legend{ display:flex; flex-wrap:wrap; gap:18px; margin-bottom:22px; font-size:13px; }
   .legend-item{display:flex;align-items:center;gap:8px;color:var(--ink-soft);}
   .swatch{width:11px;height:11px;border-radius:3px;flex:none;}
   .swatch.fixed{background:var(--fixed);}
   .swatch.estagio{background:var(--estagio);}
-  .swatch.pendente{background:var(--pendente);}
   .swatch.sat{background:var(--sat);}
 
-  /* ---------- Tabs ---------- */
-  .tabs{
-    display:flex;
-    gap:4px;
-    margin-bottom:24px;
-    flex-wrap:wrap;
-    border-bottom:1px solid var(--line);
-  }
+  .tabs{ display:flex; gap:4px; margin-bottom:22px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
   .tab{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
-    letter-spacing:0.03em;
-    background:transparent;
-    border:none;
-    padding:11px 16px;
-    cursor:pointer;
-    color:var(--ink-soft);
-    position:relative;
-    top:1px;
-    border-bottom:2px solid transparent;
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.03em;
+    background:transparent; border:none; padding:10px 14px; cursor:pointer;
+    color:var(--ink-soft); position:relative; top:1px; border-bottom:2px solid transparent;
     transition:color .15s ease, border-color .15s ease;
+    white-space:nowrap;
   }
   .tab:hover{color:var(--ink);}
   .tab.active{color:var(--ink); border-bottom-color:var(--estagio); font-weight:600;}
+  .tab.current::before{
+    content:"agora"; display:block; font-size:8px; letter-spacing:0.08em;
+    color:var(--estagio); margin-bottom:1px;
+  }
   .tab:focus-visible, button:focus-visible{outline:2px solid var(--estagio); outline-offset:2px;}
 
-  /* ---------- Week grid ---------- */
   .week{display:none;}
   .week.active{display:block; animation:fade .3s ease;}
   @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
 
-  .week-label{
-    font-family:'Source Serif 4', serif;
-    font-style:italic;
-    font-size:17px;
-    color:var(--ink-soft);
-    margin-bottom:16px;
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(5, 1fr);
-    gap:14px;
-  }
-  .grid.single-col{grid-template-columns:minmax(220px, 340px);}
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:14px; }
 
   .day-col{
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:14px;
-    box-shadow:var(--shadow);
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:10px;
+    padding:14px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px;
   }
+  .day-col.weekend{ border-color:var(--sat); }
   .day-name{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--ink);
-    font-weight:600;
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    padding-bottom:8px;
-    border-bottom:1px dashed var(--line);
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink); font-weight:600;
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding-bottom:8px; border-bottom:1px dashed var(--line);
   }
   .day-date{color:var(--ink-soft); font-weight:400;}
 
-  .block{
-    border-left:3px solid var(--fixed);
-    background:var(--fixed-tint);
-    border-radius:0 6px 6px 0;
-    padding:8px 10px;
-  }
+  .block{ border-left:3px solid var(--fixed); background:var(--fixed-tint); border-radius:0 6px 6px 0; padding:8px 10px; }
   .block.estagio{border-left-color:var(--estagio); background:var(--estagio-tint);}
-  .block.pendente{border-left-color:var(--pendente); background:var(--pendente-tint);}
+  .block.fixo{border-left-color:var(--fixed); background:var(--fixed-tint);}
   .block.sat{border-left-color:var(--sat); background:var(--sat-tint);}
 
-  .block-time{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--ink-soft);
-    margin-bottom:2px;
-  }
-  .block-title{
-    font-size:13.5px;
-    font-weight:600;
-    line-height:1.3;
-    margin-bottom:1px;
-  }
-  .block-loc{
-    font-size:12px;
-    color:var(--ink-soft);
-  }
+  .block-time{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-soft); margin-bottom:2px; }
+  .block-title{ font-size:13.5px; font-weight:600; line-height:1.3; margin-bottom:1px; }
+  .block-loc{ font-size:12px; color:var(--ink-soft); }
   .block-tag{
-    display:inline-block;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:9.5px;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    margin-top:5px;
-    color:var(--estagio);
-    font-weight:600;
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:9.5px;
+    letter-spacing:0.05em; text-transform:uppercase; margin-top:5px; font-weight:600; color:#fff;
+    padding:2px 7px; border-radius:4px;
   }
-  .block.pendente .block-tag{color:var(--pendente);}
+  .block-tag.g-c{ background:var(--gc); }
+  .block-tag.g-c1{ background:var(--gc1); }
+  .block-tag.g-c12{ background:var(--gc12); }
+  .block-tag.sat{ background:var(--sat); }
+  .block.fixo .block-tag{ background:var(--fixed); }
 
   footer{
-    margin-top:36px;
-    padding-top:18px;
-    border-top:1px solid var(--line);
-    font-size:12.5px;
-    color:var(--ink-soft);
-    line-height:1.6;
+    margin-top:36px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--ink-soft); line-height:1.6;
   }
   footer strong{color:var(--ink);}
 
-  @media (max-width: 900px){
-    .grid{grid-template-columns:1fr 1fr;}
-  }
   @media (max-width: 600px){
-    .grid{grid-template-columns:1fr;}
     body{padding:24px 14px 60px;}
   }
-
-  @media (prefers-reduced-motion: reduce){
-    .week.active{animation:none;}
-  }
+  @media (prefers-reduced-motion: reduce){ .week.active{animation:none;} }
 </style>
 </head>
 <body>
@@ -239,7 +137,7 @@
   <header>
     <span class="eyebrow">7º Período · Medicina · Sala 7 · 2026/2</span>
     <h1>Meu Cronograma Semanal</h1>
-    <p class="subtitle">Aulas fixas (teóricas e Farmacologia III) cruzadas com os estágios móveis dos grupos C e C1 — agosto de 2026.</p>
+    <p class="subtitle">Aulas fixas cruzadas com os estágios reais dos grupos C, C1 e C1.2 — agosto a novembro de 2026. A semana atual sempre aparece primeiro.</p>
     <div class="pulse">
       <svg viewBox="0 0 1160 26" preserveAspectRatio="none">
         <path d="M0,13 L260,13 L280,4 L300,22 L320,13 L1160,13"/>
@@ -250,150 +148,636 @@
   <div class="legend">
     <div class="legend-item"><span class="swatch fixed"></span>Aula fixa (teórica / Farmacologia)</div>
     <div class="legend-item"><span class="swatch estagio"></span>Estágio (da folha)</div>
-    <div class="legend-item"><span class="swatch sat"></span>Reposição avulsa</div>
+    <div class="legend-item"><span class="swatch sat"></span>Reposição fora do padrão (fim de semana)</div>
   </div>
 
-  <div class="tabs" role="tablist">
-    <button class="tab active" data-week="w0">Sáb 08/08</button>
-    <button class="tab" data-week="w1">10–14 Ago</button>
-    <button class="tab" data-week="w2">17–21 Ago</button>
-    <button class="tab" data-week="w3">24–28 Ago</button>
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" data-week="w0" data-start="2026-08-03" data-end="2026-08-09">03–07 Ago</button>
+    <button class="tab" data-week="w1" data-start="2026-08-10" data-end="2026-08-16">10–14 Ago</button>
+    <button class="tab" data-week="w2" data-start="2026-08-17" data-end="2026-08-23">17–21 Ago</button>
+    <button class="tab" data-week="w3" data-start="2026-08-24" data-end="2026-08-30">24–28 Ago</button>
+    <button class="tab" data-week="w4" data-start="2026-08-31" data-end="2026-09-06">31 Ago–04 Set</button>
+    <button class="tab" data-week="w5" data-start="2026-09-07" data-end="2026-09-13">07–11 Set</button>
+    <button class="tab" data-week="w6" data-start="2026-09-14" data-end="2026-09-20">14–18 Set</button>
+    <button class="tab" data-week="w7" data-start="2026-09-21" data-end="2026-09-27">21–25 Set</button>
+    <button class="tab" data-week="w8" data-start="2026-09-28" data-end="2026-10-04">28 Set–02 Out</button>
+    <button class="tab" data-week="w9" data-start="2026-10-05" data-end="2026-10-11">05–09 Out</button>
+    <button class="tab" data-week="w10" data-start="2026-10-12" data-end="2026-10-18">12–16 Out</button>
+    <button class="tab" data-week="w11" data-start="2026-10-19" data-end="2026-10-25">19–23 Out</button>
+    <button class="tab" data-week="w12" data-start="2026-10-26" data-end="2026-11-01">26–30 Out</button>
+    <button class="tab" data-week="w13" data-start="2026-11-02" data-end="2026-11-08">02–06 Nov</button>
+    <button class="tab" data-week="w14" data-start="2026-11-09" data-end="2026-11-15">09–13 Nov</button>
+    <button class="tab" data-week="w15" data-start="2026-11-16" data-end="2026-11-22">16–20 Nov</button>
+    <button class="tab" data-week="w16" data-start="2026-11-23" data-end="2026-11-29">23–27 Nov</button>
   </div>
 
-  <!-- SÁBADO AVULSO -->
-  <section class="week active" id="w0">
-    <p class="week-label">Reposição fora do padrão semanal</p>
-    <div class="grid single-col">
+  <section class="week" id="w0">
+    <div class="grid">
       <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">03/08</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">04/08</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">05/08</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">06/08</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">07/08</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col weekend">
         <div class="day-name">Sábado <span class="day-date">08/08</span></div>
-        <div class="block sat">
-          <div class="block-time">08h – 10h</div>
-          <div class="block-title">Oftalmologia</div>
-          <div class="block-loc">HOC</div>
-          <span class="block-tag">Estágio · reposição</span>
-        </div>
+        <div class="block sat"><div class="block-time">8h00 às 10h00</div><div class="block-title">Oftalmologia</div><div class="block-loc">HOC</div><span class="block-tag sat">Reposição · C1</span></div>
       </div>
     </div>
   </section>
 
-  <!-- SEMANA 10-14 -->
   <section class="week" id="w1">
-    <p class="week-label">Semana de 10 a 14 de agosto</p>
     <div class="grid">
       <div class="day-col">
         <div class="day-name">Segunda <span class="day-date">10/08</span></div>
-        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">10:00 – 12:30</div><div class="block-title">Prática Cl. Cirúrgica III</div><div class="block-loc">Lab. Tec. Cirurgia</div></div>
-        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">16:10 – 18:40</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Terça <span class="day-date">11/08</span></div>
-        <div class="block estagio"><div class="block-time">07:00 – 09:30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">Stella Maris</div><span class="block-tag">Estágio</span></div>
-        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">7h00 às 9h30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Quarta <span class="day-date">12/08</span></div>
-        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">15:00 – 17:50</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Quinta <span class="day-date">13/08</span></div>
-        <div class="block estagio"><div class="block-time">08:00 – 12:00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">MEDVIDA</div><span class="block-tag">Estágio · grupo C</span></div>
-        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">MEDVIDA</div><span class="block-tag g-c">Estágio · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 19h00</div><div class="block-title">Pediatria I</div><div class="block-loc">CONSULTÓRIO</div><span class="block-tag g-c1">Estágio · C1</span></div>
       </div>
       <div class="day-col">
         <div class="day-name">Sexta <span class="day-date">14/08</span></div>
-        <div class="block"><div class="block-time">10:50 – 12:30</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 17h00</div><div class="block-title">Urologia</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
       </div>
     </div>
   </section>
 
-  <!-- SEMANA 17-21 -->
   <section class="week" id="w2">
-    <p class="week-label">Semana de 17 a 21 de agosto</p>
     <div class="grid">
       <div class="day-col">
         <div class="day-name">Segunda <span class="day-date">17/08</span></div>
-        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">10:00 – 12:30</div><div class="block-title">Prática Cl. Cirúrgica III</div><div class="block-loc">Lab. Tec. Cirurgia</div></div>
-        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">16:10 – 18:40</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block fixo"><div class="block-time">10h00 às 12h30</div><div class="block-title">Clínica Cirúrgica III (Téc. Cirúrgica)</div><div class="block-loc">LAB. TEC. CIRURGIA</div><span class="block-tag g-c">Prática rotativa · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Terça <span class="day-date">18/08</span></div>
-        <div class="block estagio"><div class="block-time">07:00 – 12:00</div><div class="block-title">Clínica Cirúrgica III</div><div class="block-loc">HRLN</div><span class="block-tag">Estágio</span></div>
-        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">7h00 às 12h00</div><div class="block-title">Clínica Cirúrgica III</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Quarta <span class="day-date">19/08</span></div>
-        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">15:00 – 17:50</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Quinta <span class="day-date">20/08</span></div>
-        <div class="block estagio"><div class="block-time">08:00 – 12:00</div><div class="block-title">Pediatria I</div><div class="block-loc">UBS Golfinhos</div><span class="block-tag">Estágio</span></div>
-        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Pediatria I</div><div class="block-loc">UBS GOLFINHOS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Sexta <span class="day-date">21/08</span></div>
-        <div class="block"><div class="block-time">10:50 – 12:30</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">8h00 às 10h30</div><div class="block-title">Ginecologia I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h00 às 18h00</div><div class="block-title">Oftalmologia</div><div class="block-loc">CONSULTÓRIO</div><span class="block-tag g-c">Estágio · C</span></div>
       </div>
     </div>
   </section>
 
-  <!-- SEMANA 24-28 -->
   <section class="week" id="w3">
-    <p class="week-label">Semana de 24 a 28 de agosto</p>
     <div class="grid">
       <div class="day-col">
         <div class="day-name">Segunda <span class="day-date">24/08</span></div>
-        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">10:00 – 12:30</div><div class="block-title">Prática Cl. Cirúrgica III</div><div class="block-loc">Lab. Tec. Cirurgia</div></div>
-        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">16:10 – 18:40</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Terça <span class="day-date">25/08</span></div>
-        <div class="block estagio"><div class="block-time">07:00 – 12:00</div><div class="block-title">Neurologia</div><div class="block-loc">HRLN</div><span class="block-tag">Estágio</span></div>
-        <div class="block"><div class="block-time">13:20 – 15:50</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">7h00 às 12h00</div><div class="block-title">Neurologia</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Quarta <span class="day-date">26/08</span></div>
-        <div class="block"><div class="block-time">07:10 – 09:40</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block estagio"><div class="block-time">10:00 – 13:00</div><div class="block-title">Urologia</div><div class="block-loc">Stella Maris</div><span class="block-tag">Estágio</span></div>
-        <div class="block"><div class="block-time">15:00 – 17:50</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">10h00 às 13h00</div><div class="block-title">Urologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
       </div>
       <div class="day-col">
         <div class="day-name">Quinta <span class="day-date">27/08</span></div>
-        <div class="block estagio"><div class="block-time">08:00 – 12:00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">HRLN</div><span class="block-tag">Estágio</span></div>
-        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 19h30</div><div class="block-title">Ginecologia I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
       </div>
       <div class="day-col">
         <div class="day-name">Sexta <span class="day-date">28/08</span></div>
-        <div class="block"><div class="block-time">10:50 – 12:30</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
-        <div class="block"><div class="block-time">13:20 – 15:00</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h30 às 18h30</div><div class="block-title">Pediatria I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w4">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">31/08</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block fixo"><div class="block-time">10h00 às 12h30</div><div class="block-title">Clínica Cirúrgica III (Téc. Cirúrgica)</div><div class="block-loc">LAB. TEC. CIRURGIA</div><span class="block-tag g-c">Prática rotativa · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">01/09</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 10h00</div><div class="block-title">Oftalmologia</div><div class="block-loc">HOC</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">02/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">03/09</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 9h30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">17h00 às 19h00</div><div class="block-title">Pediatria I</div><div class="block-loc">HRLN</div><span class="block-tag g-c12">Estágio · C1.2</span></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">04/09</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">17h00 às 19h00</div><div class="block-title">Urologia</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w5">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">07/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">08/09</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 9h30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">09/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">10/09</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">MEDVIDA</div><span class="block-tag g-c">Estágio · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">11/09</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 17h00</div><div class="block-title">Urologia</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w6">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">14/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">15/09</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 12h00</div><div class="block-title">Clínica Cirúrgica III</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">16/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">17/09</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">18/09</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 10h30</div><div class="block-title">Ginecologia I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h00 às 18h00</div><div class="block-title">Oftalmologia</div><div class="block-loc">CONSULTÓRIO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w7">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">21/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block fixo"><div class="block-time">10h00 às 12h30</div><div class="block-title">Clínica Cirúrgica III (Téc. Cirúrgica)</div><div class="block-loc">LAB. TEC. CIRURGIA</div><span class="block-tag g-c">Prática rotativa · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">22/09</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h00 às 19h30</div><div class="block-title">Neurologia</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">23/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">24/09</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Urologia</div><div class="block-loc">CEMCEO</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 19h30</div><div class="block-title">Ginecologia I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">25/09</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h30 às 18h30</div><div class="block-title">Pediatria I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w8">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">28/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">29/09</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">30/09</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">01/10</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 9h30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">02/10</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">17h00 às 19h00</div><div class="block-title">Urologia</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w9">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">05/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block fixo"><div class="block-time">10h00 às 12h30</div><div class="block-title">Clínica Cirúrgica III (Téc. Cirúrgica)</div><div class="block-loc">LAB. TEC. CIRURGIA</div><span class="block-tag g-c">Prática rotativa · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">06/10</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 9h30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">07/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">08/10</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">MEDVIDA</div><span class="block-tag g-c">Estágio · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 19h00</div><div class="block-title">Pediatria I</div><div class="block-loc">CONSULTÓRIO</div><span class="block-tag g-c1">Estágio · C1</span></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">09/10</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 17h00</div><div class="block-title">Urologia</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w10">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">12/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">13/10</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">14/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">15/10</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Pediatria I</div><div class="block-loc">UBS GOLFINHOS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">16/10</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 10h30</div><div class="block-title">Ginecologia I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h00 às 18h00</div><div class="block-title">Oftalmologia</div><div class="block-loc">CONSULTÓRIO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w11">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">19/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">20/10</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 12h00</div><div class="block-title">Clínica Cirúrgica III</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">21/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">22/10</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 12h00</div><div class="block-title">Clínica Médica III</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">15h00 às 19h30</div><div class="block-title">Ginecologia I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">23/10</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">16h30 às 18h30</div><div class="block-title">Pediatria I</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w12">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">26/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">27/10</span></div>
+        <div class="block estagio"><div class="block-time">7h00 às 12h00</div><div class="block-title">Neurologia</div><div class="block-loc">HRLN</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">28/10</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">29/10</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">30/10</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">17h00 às 19h00</div><div class="block-title">Urologia</div><div class="block-loc">LAB SIMULAÇÃO</div><span class="block-tag g-c">Estágio · C</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w13">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">02/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">03/11</span></div>
+        <div class="block estagio"><div class="block-time">8h00 às 10h00</div><div class="block-title">Oftalmologia</div><div class="block-loc">HOC</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">04/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block estagio"><div class="block-time">10h00 às 13h00</div><div class="block-title">Urologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag g-c1">Estágio · C1</span></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">05/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">06/11</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w14">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">09/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">10/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">11/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">12/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">13/11</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w15">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">16/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block fixo"><div class="block-time">10h00 às 12h30</div><div class="block-title">Clínica Cirúrgica III (Téc. Cirúrgica)</div><div class="block-loc">LAB. TEC. CIRURGIA</div><span class="block-tag g-c">Prática rotativa · C</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">17/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">18/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">19/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">20/11</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="w16">
+    <div class="grid">
+      <div class="day-col">
+        <div class="day-name">Segunda <span class="day-date">23/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Clínica Cirúrgica III (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Oftalmologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">16:10</div><div class="block-title">Farmacologia III</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Terça <span class="day-date">24/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Neurologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quarta <span class="day-date">25/11</span></div>
+        <div class="block"><div class="block-time">07:10</div><div class="block-title">Otorrinolaringologia (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">15:00</div><div class="block-title">Clínica Médica III (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Quinta <span class="day-date">26/11</span></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Pediatria I (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col">
+        <div class="day-name">Sexta <span class="day-date">27/11</span></div>
+        <div class="block"><div class="block-time">10:50</div><div class="block-title">Ginecologia I (T)</div><div class="block-loc">Sala 7</div></div>
+        <div class="block"><div class="block-time">13:20</div><div class="block-title">Urologia (T)</div><div class="block-loc">Sala 7</div></div>
+      </div>
+      <div class="day-col weekend">
+        <div class="day-name">Domingo <span class="day-date">29/11</span></div>
+        <div class="block sat"><div class="block-time">7h00 às 9h30</div><div class="block-title">Otorrinolaringologia</div><div class="block-loc">STELLA MARIS</div><span class="block-tag sat">Reposição · C1</span></div>
       </div>
     </div>
   </section>
 
   <footer>
-    <strong>Nota:</strong> os estágios em verde são exatamente os da folha de estágios móveis. Nas semanas/dias em que a folha não indica nada, você não tem estágio naquele horário — só as aulas fixas do quadro. Se surgir uma nova folha com mais datas, é só me passar que eu atualizo aqui.
+    <strong>Fonte:</strong> quadro oficial "Aulas Práticas — Grupos C1, C1.2 e C" (7º período), agosto a novembro de 2026. A aba em destaque muda sozinha conforme a data de hoje, sempre trazendo a semana atual para o início da lista.
   </footer>
 
 </div>
 
 <script>
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.week').forEach(w => w.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.week).classList.add('active');
+  const weekMeta = [{"id": "w0", "start": "2026-08-03", "end": "2026-08-09"}, {"id": "w1", "start": "2026-08-10", "end": "2026-08-16"}, {"id": "w2", "start": "2026-08-17", "end": "2026-08-23"}, {"id": "w3", "start": "2026-08-24", "end": "2026-08-30"}, {"id": "w4", "start": "2026-08-31", "end": "2026-09-06"}, {"id": "w5", "start": "2026-09-07", "end": "2026-09-13"}, {"id": "w6", "start": "2026-09-14", "end": "2026-09-20"}, {"id": "w7", "start": "2026-09-21", "end": "2026-09-27"}, {"id": "w8", "start": "2026-09-28", "end": "2026-10-04"}, {"id": "w9", "start": "2026-10-05", "end": "2026-10-11"}, {"id": "w10", "start": "2026-10-12", "end": "2026-10-18"}, {"id": "w11", "start": "2026-10-19", "end": "2026-10-25"}, {"id": "w12", "start": "2026-10-26", "end": "2026-11-01"}, {"id": "w13", "start": "2026-11-02", "end": "2026-11-08"}, {"id": "w14", "start": "2026-11-09", "end": "2026-11-15"}, {"id": "w15", "start": "2026-11-16", "end": "2026-11-22"}, {"id": "w16", "start": "2026-11-23", "end": "2026-11-29"}];
+
+  function initTabs(){
+    const tabsContainer = document.getElementById('tabs');
+    const tabs = Array.from(tabsContainer.querySelectorAll('.tab'));
+    const sections = Array.from(document.querySelectorAll('.week'));
+
+    // find current or next-upcoming week based on today's date
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let idx = weekMeta.findIndex(w => today <= new Date(w.end + 'T23:59:59'));
+    let isCurrentReal = false;
+    if (idx === -1) {
+      idx = weekMeta.length - 1; // all weeks are past, fall back to the last one
+    } else {
+      const start = new Date(weekMeta[idx].start + 'T00:00:00');
+      if (today >= start) isCurrentReal = true; // today actually falls inside this week
+    }
+
+    // rotate order so idx comes first, rest follow chronologically
+    const rotatedIds = weekMeta.slice(idx).concat(weekMeta.slice(0, idx)).map(w => w.id);
+
+    rotatedIds.forEach((id, i) => {
+      const tab = tabsContainer.querySelector(`[data-week="${id}"]`);
+      if (tab) tab.style.order = i;
     });
-  });
+
+    const currentId = weekMeta[idx].id;
+    tabs.forEach(t => {
+      t.classList.remove('active', 'current');
+      if (t.dataset.week === currentId) {
+        t.classList.add('active');
+        if (isCurrentReal) t.classList.add('current');
+      }
+    });
+    sections.forEach(s => s.classList.toggle('active', s.id === currentId));
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.week).classList.add('active');
+      });
+    });
+  }
+
+  initTabs();
 </script>
 
 </body>
