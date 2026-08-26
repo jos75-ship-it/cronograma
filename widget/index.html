@@ -9,7 +9,7 @@
 <style>
   :root{
     --bg:#151109;
-    --card:#1D1810;
+    --card:rgba(29,24,16,0.55);
     --line:#4A3B24;
     --line-soft:#2C2416;
     --ink:#E9DFC4;
@@ -29,20 +29,18 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--bg);
-    background-image:
-      radial-gradient(ellipse at top, rgba(184,150,90,0.05), transparent 60%);
+    background:transparent;
     color:var(--ink);
     font-family:'Source Serif 4', Georgia, serif;
-    padding:22px 18px;
+    padding:14px 16px;
     min-height:100vh;
   }
   .wrap{max-width:720px; margin:0 auto;}
 
   header{
     text-align:center;
-    margin-bottom:16px;
-    padding-bottom:14px;
+    margin-bottom:10px;
+    padding-bottom:8px;
     position:relative;
   }
   .brand{
@@ -57,7 +55,7 @@
   }
   .rule{
     display:flex; align-items:center; justify-content:center; gap:10px;
-    margin-top:10px; color:var(--line);
+    margin-top:6px; color:var(--line);
   }
   .rule::before, .rule::after{
     content:""; flex:1; height:1px; background:var(--line); max-width:200px;
@@ -67,7 +65,7 @@
   .cols{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:16px;
+    gap:10px;
   }
   @media (max-width:460px){
     .cols{grid-template-columns:1fr;}
@@ -77,16 +75,16 @@
     background:var(--card);
     border:1px solid var(--line);
     border-radius:2px;
-    padding:16px 15px;
+    padding:11px 12px;
     display:flex;
     flex-direction:column;
-    gap:11px;
-    min-height:120px;
+    gap:7px;
+    min-height:0;
     position:relative;
   }
   .day-card::before{
     content:"";
-    position:absolute; inset:4px;
+    position:absolute; inset:3px;
     border:1px solid var(--line-soft);
     pointer-events:none;
   }
@@ -95,7 +93,7 @@
 
   .day-head{
     display:flex; justify-content:space-between; align-items:flex-end;
-    padding-bottom:10px; border-bottom:1px solid var(--line);
+    padding-bottom:6px; border-bottom:1px solid var(--line);
   }
   .day-label{
     font-family:'Cormorant Garamond', serif; font-size:11px; letter-spacing:0.2em;
@@ -104,32 +102,32 @@
   .day-card.today .day-label{ color:var(--gold); }
   .day-title{
     font-family:'Source Serif 4', serif; font-weight:700; font-style:italic;
-    font-size:19px; line-height:1.1; margin-top:1px;
+    font-size:16px; line-height:1.1; margin-top:0px;
   }
   .day-date{
     font-family:'Cormorant Garamond', serif; font-size:13px; color:var(--ink-soft); font-style:italic;
   }
 
-  .blocks{ display:flex; flex-direction:column; gap:9px; }
+  .blocks{ display:flex; flex-direction:column; gap:6px; }
 
   .block{
     border-left:2px solid var(--fixed);
     background:var(--fixed-tint);
-    padding:7px 11px;
+    padding:5px 9px;
   }
   .block.estagio{ border-left-color:var(--estagio); background:var(--estagio-tint); }
   .block.fixo{ border-left-color:var(--fixed); background:var(--fixed-tint); }
   .block.sat{ border-left-color:var(--sat); background:var(--sat-tint); }
 
   .block-time{
-    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:12.5px;
-    color:var(--ink-soft); margin-bottom:2px; letter-spacing:0.02em;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:11.5px;
+    color:var(--ink-soft); margin-bottom:0px; letter-spacing:0.02em;
   }
-  .block-title{ font-size:14px; font-weight:600; line-height:1.3; color:var(--ink); }
-  .block-loc{ font-size:12px; color:var(--ink-soft); margin-top:1px; font-style:italic; }
+  .block-title{ font-size:13px; font-weight:600; line-height:1.25; color:var(--ink); }
+  .block-loc{ font-size:11px; color:var(--ink-soft); margin-top:0px; font-style:italic; }
   .block-tag{
-    display:inline-block; font-family:'Cormorant Garamond', serif; font-size:10.5px;
-    letter-spacing:0.12em; text-transform:uppercase; margin-top:5px; font-weight:600;
+    display:inline-block; font-family:'Cormorant Garamond', serif; font-size:9.5px;
+    letter-spacing:0.12em; text-transform:uppercase; margin-top:2px; font-weight:600;
     color:var(--ink-faint);
   }
   .block-tag.g-c, .block-tag.g-c1, .block-tag.g-c12, .block-tag.sat{ color:var(--ink-faint); }
@@ -141,8 +139,8 @@
   }
 
   footer{
-    margin-top:18px; text-align:center;
-    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:11.5px;
+    margin-top:10px; text-align:center;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:10.5px;
     color:var(--ink-faint); letter-spacing:0.03em;
   }
 </style>
