@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#00000000">
+<title>Evangelho do Dia — Missal Romano 1962</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#151109;
+    --card:rgba(29,24,16,0.55);
+    --line:#4A3B24;
+    --line-soft:#2C2416;
+    --ink:#E9DFC4;
+    --ink-soft:#B7A97F;
+    --ink-faint:#7C7154;
+    --gold:#B8965A;
+    --estagio:#6E8F5C;
+    --estagio-tint:rgba(110,143,92,0.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:transparent !important;}
+  body{
+    background:transparent !important;
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    padding:14px 16px;
+    min-height:100vh;
+  }
+  .wrap{max-width:760px; margin:0 auto;}
+
+  header{
+    text-align:center;
+    margin-bottom:10px;
+    padding-bottom:8px;
+    position:relative;
+  }
+  .brand{
+    font-family:'Cormorant Garamond', serif;
+    font-size:12px; letter-spacing:0.28em; text-transform:uppercase;
+    color:var(--gold); font-weight:600;
+  }
+  .clock{
+    display:block; margin-top:4px;
+    font-family:'Source Serif 4', serif; font-style:italic;
+    font-size:12px; color:var(--ink-faint);
+  }
+  .rule{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-top:6px; color:var(--line);
+  }
+  .rule::before, .rule::after{
+    content:""; flex:1; height:1px; background:var(--line); max-width:200px;
+  }
+  .rule span{ font-size:9px; color:var(--gold); }
+
+  .cols{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .day-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:13px 15px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    position:relative;
+  }
+  .day-card::before{
+    content:"";
+    position:absolute; inset:3px;
+    border:1px solid var(--line-soft);
+    pointer-events:none;
+  }
+  .day-card.today{ border-color:var(--gold); }
+
+  .day-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding-bottom:8px; border-bottom:1px solid var(--line);
+    flex-wrap:wrap; gap:6px;
+  }
+  .day-label{
+    font-family:'Cormorant Garamond', serif; font-size:11px; letter-spacing:0.2em;
+    text-transform:uppercase; color:var(--ink-faint);
+  }
+  .day-card.today .day-label{ color:var(--gold); }
+  .day-title{
+    font-family:'Source Serif 4', serif; font-weight:700; font-style:italic;
+    font-size:16.5px; line-height:1.25; margin-top:1px;
+    max-width:420px;
+  }
+  .day-date{
+    font-family:'Cormorant Garamond', serif; font-size:13px; color:var(--ink-soft); font-style:italic;
+    white-space:nowrap;
+  }
+
+  .citation{
+    display:inline-block;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:600;
+    font-size:15px; color:var(--gold); letter-spacing:0.02em;
+  }
+
+  .gospel-text{
+    font-size:14px; line-height:1.65; color:var(--ink);
+    max-height:9.6em;
+    overflow:hidden;
+    position:relative;
+    transition:max-height 0.25s ease;
+  }
+  .gospel-text.expanded{ max-height:2000px; }
+  .gospel-text:not(.expanded)::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:2.6em;
+    background:linear-gradient(to bottom, transparent, rgba(21,17,9,0.75));
+    pointer-events:none;
+  }
+  .gospel-text .vn{
+    font-family:'Cormorant Garamond', serif; font-size:11px; color:var(--gold);
+    vertical-align:super; margin-right:2px;
+  }
+
+  .toggle-btn{
+    align-self:flex-start;
+    background:none; border:none; cursor:pointer;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:12.5px;
+    color:var(--ink-faint); letter-spacing:0.03em; padding:0;
+    text-decoration:underline; text-underline-offset:3px;
+  }
+  .toggle-btn:hover{ color:var(--gold); }
+
+  .empty, .loading{
+    font-size:13px; color:var(--ink-faint); font-style:italic; padding:4px 2px;
+  }
+
+  footer{
+    margin-top:14px; text-align:center;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:10.5px;
+    color:var(--ink-faint); letter-spacing:0.03em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="brand">Evangelho do Dia · Missal Romano 1962</span>
+    <span class="clock" id="clock"></span>
+    <div class="rule"><span>❧</span></div>
+  </header>
+
+  <div class="cols" id="cols">
+    <div class="loading">Carregando o evangelho…</div>
+  </div>
+
+  <footer>Tradução Matos Soares · atualizado automaticamente à meia-noite</footer>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — ajuste o caminho conforme a estrutura do repositório
+   ============================================================ */
+const BIBLIA_URL = '../biblia.json';
+
+/* ============================================================
+   MAPA DE LIVROS (abreviação -> nome exato usado no biblia.json)
+   ============================================================ */
+const BOOK_MAP = {
+  'Mt': 'Evangelho segundo S. Mateus',
+  'Mc': 'Evangelho segundo S. Marcos',
+  'Lc': 'Evangelho segundo S. Lucas',
+  'Jo': 'Evangelho segundo S. João'
+};
+
+/* ============================================================
+   DADOS DO CICLO TEMPORAL (Próprio do Tempo)
+   Cada semana: [Domingo, Segunda, Terça, Quarta, Quinta, Sexta, Sábado]
+   ============================================================ */
+const WD = ["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
+
+const ADVENT_WEEKS = [
+  ["Lc 21,25-33","Lc 21,25-33","Lc 21,25-33","Lc 21,25-33","Lc 21,25-33","Lc 21,25-33","Lc 21,25-33"],
+  ["Mt 11,2-10","Mt 11,2-10","Mt 11,2-10","Mt 11,2-10","Mt 11,2-10","Mt 11,2-10","Mt 11,2-10"],
+  ["Jo 1,19-28","Jo 1,19-28","Jo 1,19-28","Lc 1,26-38","Jo 1,19-28","Lc 1,39-47","Lc 3,1-6"],
+  ["Lc 3,1-6","Lc 3,1-6","Lc 3,1-6","Lc 3,1-6","Lc 3,1-6","Lc 3,1-6","Lc 3,1-6"]
+];
+const ADVENT_LABELS = ["I Domingo do Advento","II Domingo do Advento","III Domingo do Advento — Gaudete","IV Domingo do Advento"];
+
+// datas fixas: "MM-DD" -> {label, cit}
+const CHRISTMAS_FIXED = {
+  "12-24": ["Vigília do Natal", "Mt 1,18-21"],
+  "12-25": ["Natal do Senhor", "Jo 1,1-14"],
+  "12-26": ["Santo Estêvão, Protomártir", "Mt 23,34-39"],
+  "12-27": ["São João Evangelista", "Jo 21,19-24"],
+  "12-28": ["Santos Inocentes", "Mt 2,13-18"],
+  "12-29": ["Féria na Oitava do Natal", "Lc 2,15-20"],
+  "12-30": ["Féria na Oitava do Natal", "Lc 2,15-20"],
+  "12-31": ["Féria na Oitava do Natal", "Lc 2,15-20"],
+  "01-01": ["Circuncisão do Senhor", "Lc 2,21"],
+  "01-02": ["Santíssimo Nome de Jesus", "Lc 2,21"],
+  "01-03": ["Féria depois do Ano Novo", "Lc 2,21"],
+  "01-04": ["Féria depois do Ano Novo", "Lc 2,21"],
+  "01-05": ["Féria depois do Ano Novo", "Lc 2,21"],
+  "01-06": ["Epifania do Senhor", "Mt 2,1-12"],
+  "01-13": ["Comemoração do Batismo do Senhor", "Jo 1,29-34"]
+};
+const SUNDAY_IN_OCTAVE = ["Domingo na Oitava do Natal", "Lc 2,33-40"];
+const HOLY_FAMILY = ["I Domingo depois da Epifania — Sagrada Família", "Lc 2,42-52"];
+
+const EPIPHANY_SUNDAYS = [ // II..VI
+  ["2º Domingo depois da Epifania", "Jo 2,1-11"],
+  ["3º Domingo depois da Epifania", "Mt 8,1-13"],
+  ["4º Domingo depois da Epifania", "Mt 8,23-27"],
+  ["5º Domingo depois da Epifania", "Mt 13,24-30"],
+  ["6º Domingo depois da Epifania", "Mt 13,31-35"]
+];
+const RESUMED_EPIPHANY = [ // III..VI retomado
+  ["III Domingo depois da Epifania (retomado)", "Mt 8,1-13"],
+  ["IV Domingo depois da Epifania (retomado)", "Mt 8,23-27"],
+  ["V Domingo depois da Epifania (retomado)", "Mt 13,24-30"],
+  ["VI Domingo depois da Epifania (retomado)", "Mt 13,31-35"]
+];
+
+const SEPTUAGESIMA = ["Domingo da Septuagésima", "Mt 20,1-16"];
+const SEXAGESIMA   = ["Domingo da Sexagésima", "Lc 8,4-15"];
+const QUINQUAGESIMA= ["Domingo da Quinquagésima", "Lc 18,31-43"];
+
+const ASH_WEEK = { // offsets from Ash Wednesday (0=Wed..3=Sat)
+  0: ["Quarta-feira de Cinzas", "Mt 6,16-21"],
+  1: ["Quinta-feira depois das Cinzas", "Mt 8,5-13"],
+  2: ["Sexta-feira depois das Cinzas", "Mt 5,43\u201316,4".replace("16,4","6,4")],
+  3: ["Sábado depois das Cinzas", "Mc 6,47-56"]
+};
+// fix citation string with proper en-dash cross-chapter form
+ASH_WEEK[2] = ["Sexta-feira depois das Cinzas", "Mt 5,43\u20136,4"];
+
+const LENT_WEEKS = [
+  ["Mt 4,1-11","Mt 25,31-46","Mt 21,10-17","Mt 12,38-50","Mt 15,21-28","Jo 5,1-15","Mt 17,1-9"],
+  ["Mt 17,1-9","Jo 8,21-29","Mt 23,1-12","Mt 20,17-28","Lc 16,19-31","Mt 21,33-46","Lc 15,11-32"],
+  ["Lc 11,14-28","Lc 4,23-30","Mt 18,15-22","Mt 15,1-20","Lc 4,38-44","Jo 4,5-42","Jo 8,1-11"],
+  ["Jo 6,1-15","Jo 2,13-25","Jo 7,14-31","Jo 9,1-38","Lc 7,11-16","Jo 11,1-45","Jo 8,12-20"]
+];
+const LENT_LABELS = ["I Domingo da Quaresma","II Domingo da Quaresma","III Domingo da Quaresma","IV Domingo da Quaresma — Laetare"];
+
+const PASSION_WEEK = ["Jo 8,46-59","Jo 7,32-39","Jo 7,1-13","Jo 10,22-38","Lc 7,36-50","Jo 11,47-54","Jo 12,10-36"];
+const PASSION_LABEL = "Domingo da Paixão";
+
+const HOLY_WEEK_LABELS = ["Domingo de Ramos","Segunda-feira Santa","Terça-feira Santa — Paixão","Quarta-feira Santa — Paixão","Quinta-feira Santa — Missa da Ceia do Senhor","Sexta-feira Santa — Paixão do Senhor","Sábado Santo — Vigília Pascal"];
+const HOLY_WEEK = ["Mt 26,36\u201327,66","Jo 12,1-9","Mc 14,32\u201315,46","Lc 22,39\u201323,53","Jo 13,1-15","Jo 18,1\u201319,42","Mt 28,1-7"];
+
+const EASTER_OCTAVE_LABELS = ["Domingo da Ressurreição","Segunda-feira na Oitava da Páscoa","Terça-feira na Oitava da Páscoa","Quarta-feira na Oitava da Páscoa","Quinta-feira na Oitava da Páscoa","Sexta-feira na Oitava da Páscoa","Sábado in albis, na Oitava da Páscoa"];
+const EASTER_OCTAVE = ["Mc 16,1-7","Lc 24,13-35","Lc 24,36-47","Jo 21,1-14","Jo 20,11-18","Mt 28,16-20","Jo 20,1-9"];
+
+const EASTER_WEEKS = [ // 2..5 (all ferias = sunday citation)
+  { label: "Domingo in albis / Domingo da Oitava da Páscoa", cit: "Jo 20,19-31" },
+  { label: "II Domingo depois da Páscoa — Bom Pastor", cit: "Jo 10,11-16" },
+  { label: "III Domingo depois da Páscoa", cit: "Jo 16,16-22" },
+  { label: "IV Domingo depois da Páscoa", cit: "Jo 16,5-14" }
+];
+
+// week starting at V Domingo depois da Páscoa (special weekdays)
+const V_EASTER_WEEK_LABELS = ["V Domingo depois da Páscoa","Segunda-feira","Terça-feira","Quarta-feira — Vigília da Ascensão","Quinta-feira — Ascensão do Senhor","Sexta-feira depois da Ascensão","Sábado depois da Ascensão"];
+const V_EASTER_WEEK = ["Jo 16,23-30","Jo 16,23-30","Jo 16,23-30","Jo 17,1-11","Mc 16,14-20","Mc 16,14-20","Mc 16,14-20"];
+
+const ASCENSION_WEEK_LABELS = ["Domingo depois da Ascensão","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado — Vigília de Pentecostes"];
+const ASCENSION_WEEK = ["Jo 15,26\u201316,4","Jo 15,26\u201316,4","Jo 15,26\u201316,4","Jo 15,26\u201316,4","Jo 15,26\u201316,4","Jo 15,26\u201316,4","Jo 14,15-21"];
+
+const PENTECOST_WEEK_LABELS = ["Domingo de Pentecostes","Segunda-feira na Oitava de Pentecostes","Terça-feira na Oitava de Pentecostes","Quarta-feira das Têmporas de Pentecostes","Quinta-feira na Oitava de Pentecostes","Sexta-feira das Têmporas de Pentecostes","Sábado das Têmporas de Pentecostes"];
+const PENTECOST_WEEK = ["Jo 14,23-31","Jo 3,16-21","Jo 10,1-10","Jo 6,44-52","Lc 9,1-6","Lc 5,17-26","Lc 4,38-44"];
+
+const TRINITY_WEEK_LABELS = ["Domingo da Santíssima Trindade","Segunda-feira depois da Santíssima Trindade","Terça-feira depois da Santíssima Trindade","Quarta-feira depois da Santíssima Trindade","Quinta-feira — Corpus Christi","Sexta-feira depois da Santíssima Trindade","Sábado depois da Santíssima Trindade"];
+const TRINITY_WEEK = ["Mt 28,18-20","Lc 6,36-42","Lc 6,36-42","Lc 6,36-42","Jo 6,56-59","Lc 6,36-42","Lc 6,36-42"];
+
+// Sundays II..XXIV depois de Pentecostes (index 0 = II)
+const PENTECOST_SUNDAYS = [
+  "Lc 14,16-24","Lc 15,1-10","Lc 5,1-11","Mt 5,20-24","Mc 8,1-9","Mt 7,15-21","Lc 16,1-9",
+  "Lc 19,41-47","Lc 18,9-14","Mc 7,31-37","Lc 10,23-37","Lc 17,11-19","Mt 6,24-33","Lc 7,11-16",
+  "Lc 14,1-11","Mt 22,34-46","Mt 9,1-8","Mt 22,1-14","Jo 4,46-53","Mt 18,23-35","Mt 22,15-21",
+  "Mt 9,18-26","Mt 24,15-35"
+];
+const PENTECOST_SUNDAY_LABELS = [
+  "2º","3º","4º","5º","6º","7º","8º","9º","10º","11º","12º","13º","14º","15º","16º","17º","18º","19º","20º","21º","22º","23º","24º e último"
+];
+const SACRED_HEART = ["Sagrado Coração de Jesus", "Jo 19,31-37"]; // sexta depois do 2º domingo
+const CHRIST_KING = ["Nosso Senhor Jesus Cristo Rei", "Jo 18,33-37"];
+const SEPT_EMBER = { // offsets from 3rd sunday of september: 3=wed,5=fri,6=sat
+  3: ["Quarta-feira das Têmporas de setembro", "Mc 9,16-28"],
+  5: ["Sexta-feira das Têmporas de setembro", "Lc 7,36-50"],
+  6: ["Sábado das Têmporas de setembro", "Lc 13,6-17"]
+};
+
+/* ============================================================
+   SANTORAL FIXO (fora do intervalo 24/dez–13/jan, já coberto acima)
+   "alta precedência" pode substituir até um domingo de tempo comum
+   ============================================================ */
+function sanctoralFor(year){
+  const isLeap = (year%4===0 && (year%100!==0 || year%400===0));
+  const s = {
+    "01-25": ["Conversão de São Paulo", "Mt 19,27-29"],
+    "02-02": ["Purificação da B. V. Maria — Candelária", "Lc 2,22-32"],
+    "02-22": ["Cátedra de São Pedro", "Mt 16,13-19"],
+    [isLeap ? "02-24" : "02-25"]: ["São Matias Apóstolo", "Mt 11,25-30"],
+    "03-19": ["São José, Esposo da B. V. Maria", "Mt 1,18-21", true],
+    "03-25": ["Anunciação da B. V. Maria", "Lc 1,26-38", true],
+    "04-25": ["São Marcos Evangelista", "Lc 10,1-9"],
+    "05-01": ["São José Operário", "Mt 13,54-58"],
+    "05-11": ["Santos Filipe e Tiago Apóstolos", "Jo 14,1-13"],
+    "05-31": ["B. V. Maria Rainha", "Lc 1,26-33"],
+    "06-23": ["Vigília da Natividade de São João Batista", "Lc 1,5-17"],
+    "06-24": ["Natividade de São João Batista", "Lc 1,57-68"],
+    "06-28": ["Vigília dos Santos Pedro e Paulo", "Jo 21,15-19"],
+    "06-29": ["Santos Pedro e Paulo Apóstolos", "Mt 16,13-19"],
+    "07-01": ["Preciosíssimo Sangue de Nosso Senhor Jesus Cristo", "Jo 19,30-35"],
+    "07-02": ["Visitação da B. V. Maria", "Lc 1,39-47"],
+    "07-25": ["São Tiago Apóstolo", "Mt 20,20-23"],
+    "07-26": ["Santa Ana", "Mt 13,44-52"],
+    "08-06": ["Transfiguração de Nosso Senhor Jesus Cristo", "Mt 17,1-9"],
+    "08-10": ["São Lourenço Mártir", "Jo 12,24-26"],
+    "08-14": ["Vigília da Assunção", "Lc 11,27-28"],
+    "08-15": ["Assunção da B. V. Maria", "Lc 1,41-50", true],
+    "08-24": ["São Bartolomeu Apóstolo", "Lc 6,12-19"],
+    "09-08": ["Natividade da B. V. Maria", "Mt 1,1-16"],
+    "09-14": ["Exaltação da Santa Cruz", "Jo 12,31-36"],
+    "09-15": ["Sete Dores da B. V. Maria", "Jo 19,25-27"],
+    "09-21": ["São Mateus Apóstolo e Evangelista", "Mt 9,9-13"],
+    "09-29": ["Dedicação de São Miguel Arcanjo", "Mt 18,1-10"],
+    "10-02": ["Santos Anjos da Guarda", "Mt 18,1-10"],
+    "10-07": ["Nossa Senhora do Santíssimo Rosário", "Lc 1,26-38"],
+    "10-11": ["Maternidade da B. V. Maria", "Lc 2,43-51"],
+    "10-18": ["São Lucas Evangelista", "Lc 10,1-9"],
+    "10-28": ["Santos Simão e Judas Apóstolos", "Jo 15,17-25"],
+    "11-01": ["Todos os Santos", "Mt 5,1-12", true],
+    "11-02": ["Comemoração de Todos os Fiéis Defuntos", "Jo 5,25-29"],
+    "11-09": ["Dedicação da Arquibasílica do Santíssimo Salvador", "Lc 19,1-10"],
+    "11-30": ["Santo André Apóstolo", "Mt 4,18-22"],
+    "12-08": ["Imaculada Conceição da B. V. Maria", "Lc 1,26-38", true],
+    "12-21": ["São Tomé Apóstolo", "Jo 20,24-29"]
+  };
+  return s;
+}
+
+/* ============================================================
+   CÁLCULO DE PÁSCOA (algoritmo de Meeus/Jones/Butcher, gregoriano)
+   ============================================================ */
+function computeEaster(year){
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19*a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2*e + 2*i - h - k) % 7;
+  const m = Math.floor((a + 11*h + 22*l) / 451);
+  const month = Math.floor((h + l - 7*m + 114) / 31);
+  const day = ((h + l - 7*m + 114) % 31) + 1;
+  return new Date(year, month - 1, day);
+}
+
+function addDays(date, n){
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+function ymd(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0'); }
+function mmdd(d){ return String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0'); }
+function sameDate(a,b){ return ymd(a)===ymd(b); }
+
+// most recent Sunday on/before d
+function sundayOnOrBefore(d){
+  return addDays(d, -d.getDay());
+}
+// first Sunday strictly after d
+function sundayStrictlyAfter(d){
+  const days = 7 - d.getDay();
+  return addDays(d, days === 7 ? 7 : days || 7);
+}
+
+/* ============================================================
+   MONTA O MAPA LITÚRGICO DE UM "ANO LITÚRGICO" (Advento -> Advento)
+   que cobre o ano civil `year`, retornando função lookup(date)
+   ============================================================ */
+function buildLiturgicalYear(civilYear){
+  // ancoras baseadas no Natal DESTE ano civil e no anterior, para cobrir jan-dez corretamente
+  function adventStartFor(christmasYear){
+    const dec25 = new Date(christmasYear, 11, 25);
+    const advent4 = sundayOnOrBefore(addDays(dec25, -1)); // last sunday on/before dec24
+    return addDays(advent4, -21);
+  }
+
+  const map = {}; // "YYYY-MM-DD" -> {label, cit, highPrec:bool}
+
+  function set(date, label, cit, highPrec){
+    map[ymd(date)] = { label, cit, highPrec: !!highPrec };
+  }
+
+  // processa dois "ciclos" (o que começa no advento do ano anterior, e o deste ano)
+  // para garantir cobertura completa de jan-dez do civilYear
+  [civilYear-1, civilYear].forEach(chYear => {
+    const easter = computeEaster(chYear+1); // Easter falls in the year AFTER Advent begins
+    const advent1 = adventStartFor(chYear);
+
+    // ADVENTO
+    for (let w=0; w<4; w++){
+      const sunday = addDays(advent1, w*7);
+      for (let d=0; d<7; d++){
+        set(addDays(sunday,d), d===0?ADVENT_LABELS[w]:(WD[d]+" — "+ADVENT_LABELS[w]), ADVENT_WEEKS[w][d]);
+      }
+    }
+
+    // NATAL FIXO (24 dez ano chYear -> 13 jan chYear+1)
+    Object.keys(CHRISTMAS_FIXED).forEach(md => {
+      const [mm,dd] = md.split("-").map(Number);
+      const y = (mm===12) ? chYear : chYear+1;
+      const date = new Date(y, mm-1, dd);
+      set(date, CHRISTMAS_FIXED[md][0], CHRISTMAS_FIXED[md][1]);
+    });
+    // Domingo na oitava (apenas 29,30,31 dez podem ser sobrescritos)
+    [29,30,31].forEach(dd=>{
+      const date = new Date(chYear,11,dd);
+      if (date.getDay()===0) set(date, SUNDAY_IN_OCTAVE[0], SUNDAY_IN_OCTAVE[1]);
+    });
+
+    // EPIFANIA -> ANTES DO I DOMINGO
+    const epiphany = new Date(chYear+1, 0, 6);
+    const holyFamilySunday = sundayStrictlyAfter(epiphany);
+    for (let d = addDays(epiphany,1); d < holyFamilySunday; d = addDays(d,1)){
+      if (!map[ymd(d)]) set(d, "Féria antes do I Domingo depois da Epifania", "Mt 2,1-12");
+    }
+    // I domingo (sagrada familia) + suas ferias ate o proximo domingo
+    set(holyFamilySunday, HOLY_FAMILY[0], HOLY_FAMILY[1]);
+    for (let d=1; d<7; d++){
+      const dt = addDays(holyFamilySunday,d);
+      if (!map[ymd(dt)]) set(dt, WD[d]+" — "+HOLY_FAMILY[0], HOLY_FAMILY[1]);
+    }
+
+    // SEPTUAGESIMA E ANTERIORES
+    const septuagesima = addDays(easter, -63);
+    const sexagesima = addDays(easter, -56);
+    const quinquagesima = addDays(easter, -49);
+    const ashWednesday = addDays(easter, -46);
+
+    // domingos II..VI depois da epifania (apenas os que cabem antes da septuagesima)
+    let epUsed = 0;
+    for (let k=0; k<5; k++){ // II..VI
+      const sunday = addDays(holyFamilySunday, 7*(k+1));
+      if (sunday.getTime() >= septuagesima.getTime()) break;
+      epUsed = k+1;
+      const [label,cit] = EPIPHANY_SUNDAYS[k];
+      set(sunday, label, cit);
+      for (let d=1; d<7; d++){
+        const dt = addDays(sunday,d);
+        const nextBoundary = addDays(sunday,7);
+        if (dt.getTime() < Math.min(septuagesima.getTime(), nextBoundary.getTime()))
+          if (!map[ymd(dt)]) set(dt, WD[d]+" — "+label, cit);
+      }
+    }
+
+    set(septuagesima, SEPTUAGESIMA[0], SEPTUAGESIMA[1]);
+    for (let d=1; d<7; d++) set(addDays(septuagesima,d), WD[d]+" — "+SEPTUAGESIMA[0], SEPTUAGESIMA[1]);
+    set(sexagesima, SEXAGESIMA[0], SEXAGESIMA[1]);
+    for (let d=1; d<7; d++) set(addDays(sexagesima,d), WD[d]+" — "+SEXAGESIMA[0], SEXAGESIMA[1]);
+    set(quinquagesima, QUINQUAGESIMA[0], QUINQUAGESIMA[1]);
+    set(addDays(quinquagesima,1), "Segunda-feira — "+QUINQUAGESIMA[0], QUINQUAGESIMA[1]);
+    set(addDays(quinquagesima,2), "Terça-feira — "+QUINQUAGESIMA[0], QUINQUAGESIMA[1]);
+
+    // QUARESMA
+    for (let i=0;i<4;i++) set(addDays(ashWednesday,i), ASH_WEEK[i][0], ASH_WEEK[i][1]);
+    for (let w=0; w<4; w++){
+      const sunday = addDays(easter, -42 + w*7);
+      for (let d=0; d<7; d++){
+        const lbl = d===0 ? LENT_LABELS[w] : (WD[d]+" da "+(w+1)+"ª semana da Quaresma");
+        set(addDays(sunday,d), lbl, LENT_WEEKS[w][d]);
+      }
+    }
+
+    // PAIXAO
+    const passionSunday = addDays(easter,-14);
+    for (let d=0; d<7; d++){
+      const lbl = d===0 ? PASSION_LABEL : (WD[d]+" da Semana da Paixão");
+      set(addDays(passionSunday,d), lbl, PASSION_WEEK[d]);
+    }
+
+    // SEMANA SANTA
+    const palmSunday = addDays(easter,-7);
+    for (let d=0; d<7; d++) set(addDays(palmSunday,d), HOLY_WEEK_LABELS[d], HOLY_WEEK[d]);
+
+    // OITAVA DA PASCOA
+    for (let d=0; d<7; d++) set(addDays(easter,d), EASTER_OCTAVE_LABELS[d], EASTER_OCTAVE[d]);
+
+    // DOMINGOS II-V DEPOIS DA PASCOA (semanas inteiras)
+    EASTER_WEEKS.forEach((info,idx)=>{
+      const sunday = addDays(easter, 7*(idx+1));
+      for (let d=0; d<7; d++){
+        const lbl = d===0 ? info.label : (WD[d]+" — "+info.label);
+        set(addDays(sunday,d), lbl, info.cit);
+      }
+    });
+
+    // V DOMINGO DEPOIS DA PASCOA ATE VESPERA DA ASCENSAO
+    const vEasterSunday = addDays(easter, 35);
+    for (let d=0; d<7; d++) set(addDays(vEasterSunday,d), V_EASTER_WEEK_LABELS[d], V_EASTER_WEEK[d]);
+
+    // DOMINGO DEPOIS DA ASCENSAO
+    const ascensionSunday = addDays(easter, 42);
+    for (let d=0; d<7; d++) set(addDays(ascensionSunday,d), ASCENSION_WEEK_LABELS[d], ASCENSION_WEEK[d]);
+
+    // PENTECOSTES
+    const pentecost = addDays(easter,49);
+    for (let d=0; d<7; d++) set(addDays(pentecost,d), PENTECOST_WEEK_LABELS[d], PENTECOST_WEEK[d]);
+
+    // TRINDADE
+    const trinity = addDays(easter,56);
+    for (let d=0; d<7; d++) set(addDays(trinity,d), TRINITY_WEEK_LABELS[d], TRINITY_WEEK[d]);
+    // sagrado coracao (sexta depois do 2 domingo) sobrescrito depois
+
+    // TEMPO DEPOIS DE PENTECOSTES
+    const advent1Next = adventStartFor(chYear+1);
+    const lastSunday = addDays(advent1Next, -7);
+    const totalWeeks = Math.round((lastSunday - trinity)/(7*86400000)); // posicoes: trinity=0
+    // sundays numeradas II..N ficam nas posicoes 1..totalWeeks-1; a ultima (totalWeeks) e sempre XXIV
+    const numberedSlots = totalWeeks - 1; // quantidade de domingos numerados antes do ultimo
+    const maxNumbered = 22; // III..XXIII normalmente cabem numerados (posicoes 1..22 => II..XXIII)
+    for (let pos=1; pos<=numberedSlots; pos++){
+      const sunday = addDays(trinity, pos*7);
+      let label, cit;
+      if (pos <= maxNumbered){
+        label = PENTECOST_SUNDAY_LABELS[pos-1] + " Domingo depois de Pentecostes";
+        cit = PENTECOST_SUNDAYS[pos-1];
+      } else {
+        // usa domingos retomados da epifania (III, IV, V, VI) que nao foram usados antes da quaresma
+        const resumeIdx = pos - maxNumbered - 1; // 0=III,1=IV,2=V,3=VI
+        const epIdx = epUsed + resumeIdx; // epUsed conta quantos ja foram usados (I nao conta, k comeca em II=0)
+        if (epIdx>=0 && epIdx<4){
+          label = RESUMED_EPIPHANY[epIdx][0];
+          cit = RESUMED_EPIPHANY[epIdx][1];
+        } else {
+          label = "24º e último Domingo depois de Pentecostes";
+          cit = PENTECOST_SUNDAYS[22];
+        }
+      }
+      set(sunday, label, cit);
+      for (let d=1; d<7; d++) if(!map[ymd(addDays(sunday,d))]) set(addDays(sunday,d), WD[d]+" — "+label, cit);
+    }
+    // ultimo domingo, sempre XXIV
+    set(lastSunday, "24º e último Domingo depois de Pentecostes", PENTECOST_SUNDAYS[22]);
+    for (let d=1; d<7; d++) if(!map[ymd(addDays(lastSunday,d))]) set(addDays(lastSunday,d), WD[d]+" — 24º e último Domingo depois de Pentecostes", PENTECOST_SUNDAYS[22]);
+
+    // SAGRADO CORACAO (sexta depois do 2 domingo depois de pentecostes)
+    const secondSunday = addDays(trinity,7);
+    set(addDays(secondSunday,5), SACRED_HEART[0], SACRED_HEART[1]);
+
+    // TEMPORAS DE SETEMBRO (semana apos o 3 domingo de setembro)
+    const sept1 = new Date(chYear+1,8,1);
+    const firstSundaySept = sundayOnOrBefore(sept1).getMonth()===8 ? sundayOnOrBefore(sept1) : addDays(sept1, (7-sept1.getDay())%7);
+    const thirdSundaySept = addDays(firstSundaySept, 14);
+    Object.keys(SEPT_EMBER).forEach(off=>{
+      const dt = addDays(thirdSundaySept, Number(off));
+      set(dt, SEPT_EMBER[off][0], SEPT_EMBER[off][1]);
+    });
+
+    // CRISTO REI (ultimo domingo de outubro) - sobrescreve so o domingo
+    const oct31 = new Date(chYear+1,10,0); // dia 0 do mes 11 (indice 10+1=11) = 31/10
+    const christKingSunday = sundayOnOrBefore(oct31);
+    set(christKingSunday, CHRIST_KING[0], CHRIST_KING[1]);
+  });
+
+  // SANTORAL FIXO (sobrescreve dias de semana; em domingos so se highPrec e a estacao permitir)
+  [civilYear-1, civilYear, civilYear+1].forEach(y=>{
+    const s = sanctoralFor(y);
+    Object.keys(s).forEach(md=>{
+      const [mm,dd] = md.split("-").map(Number);
+      const date = new Date(y, mm-1, dd);
+      const key = ymd(date);
+      const entry = s[md];
+      const isSunday = date.getDay()===0;
+      const existing = map[key];
+      if (!isSunday){
+        // nao sobrescreve semana santa/oitava da pascoa/oitava de pentecostes mesmo em dia de semana,
+        // exceto para as festas de alta precedencia (Sao Jose, Anunciacao, etc.)
+        const protectedPeriod = existing && /Semana Santa|Oitava da Páscoa|Oitava de Pentecostes|Paixão/i.test(existing.label);
+        if (!protectedPeriod || entry[2]) {
+          map[key] = { label: entry[0], cit: entry[1], highPrec: !!entry[2] };
+        }
+      } else if (entry[2] && existing){
+        // domingo: so sobrescreve se a estacao for "comum" (depois da epifania / depois de pentecostes)
+        const commonSeason = /depois da Epifania|depois de Pentecostes/i.test(existing.label) && !/retomado/i.test(existing.label);
+        if (commonSeason) map[key] = { label: entry[0], cit: entry[1], highPrec: true };
+      }
+    });
+  });
+
+  return map;
+}
+
+/* ============================================================
+   BUSCA DO TEXTO NO biblia.json
+   ============================================================ */
+function parseCitation(cit){
+  const m = cit.match(/^([A-Za-zÀ-ÿ.]+)\s+(\d+),(\d+)(?:[-\u2013](?:(\d+),)?(\d+))?$/);
+  if (!m) return null;
+  const book = m[1];
+  const c1 = parseInt(m[2],10);
+  const v1 = parseInt(m[3],10);
+  const c2 = m[4] ? parseInt(m[4],10) : c1;
+  const v2 = m[5] ? parseInt(m[5],10) : v1;
+  return { book, c1, v1, c2, v2 };
+}
+
+function getPassageText(bibleData, cit){
+  const p = parseCitation(cit);
+  if (!p) return null;
+  const bookName = BOOK_MAP[p.book];
+  const book = bibleData.find(b => b.livro === bookName);
+  if (!book) return null;
+  let verses = [];
+  for (let c = p.c1; c <= p.c2; c++){
+    const chap = book.capitulos.find(ch => ch.capitulo === c);
+    if (!chap) continue;
+    const vStart = (c === p.c1) ? p.v1 : 1;
+    const vEnd = (c === p.c2) ? p.v2 : Infinity;
+    chap.versiculos.forEach(v => {
+      if (v.numero >= vStart && v.numero <= vEnd){
+        verses.push({ n: v.numero, c: c, t: v.texto, showChap: (p.c1!==p.c2) });
+      }
+    });
+  }
+  return verses;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+let BIBLE_DATA = null;
+
+function renderVerses(verses){
+  if (!verses || !verses.length) return '<div class="empty">Texto não encontrado.</div>';
+  return verses.map(v => `<span class="vn">${v.showChap ? v.c+','+v.n : v.n}</span>${v.t} `).join('');
+}
+
+function dayInfo(date, liturgicalMap){
+  const key = ymd(date);
+  return liturgicalMap[key] || { label: "Féria", cit: null };
+}
+
+function renderDayCard(date, label, isToday, liturgicalMap){
+  const info = dayInfo(date, liturgicalMap);
+  const wd = WD[date.getDay()];
+  const months = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  const dstr = `${String(date.getDate()).padStart(2,'0')} ${months[date.getMonth()]}`;
+  let bodyHtml = '<div class="loading">carregando…</div>';
+  if (info.cit){
+    const verses = BIBLE_DATA ? getPassageText(BIBLE_DATA, info.cit) : null;
+    const textHtml = BIBLE_DATA ? renderVerses(verses) : '<div class="loading">carregando texto…</div>';
+    bodyHtml = `
+      <span class="citation">${info.cit}</span>
+      <div class="gospel-text" id="text-${key(date)}">${textHtml}</div>
+      <button class="toggle-btn" data-target="text-${key(date)}">continuar lendo ▾</button>
+    `;
+  } else {
+    bodyHtml = '<div class="empty">Sem evangelho próprio identificado.</div>';
+  }
+  return `
+    <div class="day-card ${isToday ? 'today' : ''}">
+      <div class="day-head">
+        <div>
+          <div class="day-label">${label}</div>
+          <div class="day-title">${info.label}</div>
+        </div>
+        <div class="day-date">${wd}, ${dstr}</div>
+      </div>
+      ${bodyHtml}
+    </div>`;
+}
+function key(date){ return ymd(date).replace(/-/g,''); }
+
+function render(){
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const tomorrow = addDays(today,1);
+
+  const liturgicalMap = buildLiturgicalYear(today.getFullYear());
+
+  document.getElementById('cols').innerHTML =
+    renderDayCard(today, 'Hoje', true, liturgicalMap) +
+    renderDayCard(tomorrow, 'Amanhã', false, liturgicalMap);
+
+  document.getElementById('clock').textContent =
+    today.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
+
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const el = document.getElementById(btn.dataset.target);
+      el.classList.toggle('expanded');
+      btn.textContent = el.classList.contains('expanded') ? 'recolher ▴' : 'continuar lendo ▾';
+    });
+  });
+}
+
+fetch(BIBLIA_URL)
+  .then(r => r.json())
+  .then(data => { BIBLE_DATA = data; render(); })
+  .catch(err => {
+    document.getElementById('cols').innerHTML = '<div class="empty">Não foi possível carregar a Bíblia (' + BIBLIA_URL + '). Verifique o caminho do arquivo.</div>';
+    console.error(err);
+  });
+
+let lastDay = new Date().getDate();
+setInterval(() => {
+  const d = new Date().getDate();
+  if (d !== lastDay){ lastDay = d; render(); }
+}, 60 * 1000);
+</script>
+
+</body>
+</html>
