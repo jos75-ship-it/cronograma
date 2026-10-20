@@ -121,6 +121,8 @@
   .block.estagio{ border-left-color:var(--estagio); background:var(--estagio-tint); }
   .block.fixo{ border-left-color:var(--fixed); background:var(--fixed-tint); }
   .block.sat{ border-left-color:var(--sat); background:var(--sat-tint); }
+  .block.prova{ border-left-color:#C8574A; background:rgba(200,87,74,0.12); }
+  .block.prova .block-title{ color:#E08A7E; }
 
   .block-time{
     font-family:'Cormorant Garamond', serif; font-style:italic; font-size:11.5px;
@@ -162,7 +164,18 @@
 </div>
 
 <script>
-  const DATA = {"fixed": {"0": [["07:10", "09:40", "Clínica Cirúrgica III (T)"], ["13:20", "15:50", "Oftalmologia (T)"], ["16:10", "18:40", "Farmacologia III"]], "1": [["13:20", "15:50", "Neurologia (T)"]], "2": [["07:10", "09:40", "Otorrinolaringologia (T)"], ["15:00", "17:50", "Clínica Médica III (T)"]], "3": [["13:20", "15:00", "Pediatria I (T)"]], "4": [["10:50", "12:30", "Ginecologia I (T)"], ["13:20", "15:00", "Urologia (T)"]]}, "estagios": [{"date": "2026-08-08", "start": "08:00", "end": "10:00", "title": "Oftalmologia", "loc": "HOC", "prof": "Camila", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-11", "start": "07:00", "end": "09:30", "title": "Otorrinolaringologia", "loc": "STELLA MARIS", "prof": "Pedro e Carolina", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-13", "start": "08:00", "end": "12:00", "title": "Clínica Médica III", "loc": "MEDVIDA", "prof": "Fernanda", "grupo": "C", "type": "estagio"}, {"date": "2026-08-13", "start": "15:00", "end": "19:00", "title": "Pediatria I", "loc": "CONSULTÓRIO", "prof": "Elisa", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-14", "start": "15:00", "end": "17:00", "title": "Urologia", "loc": "LAB SIMULAÇÃO", "prof": "Eder, Maciel, Paulo e Mateus", "grupo": "C", "type": "estagio"}, {"date": "2026-08-17", "start": "10:00", "end": "12:30", "title": "Clínica Cirúrgica III (Téc. Cirúrgica)", "loc": "LAB. TEC. CIRURGIA", "prof": "Douglas, Vinicius e Giselle", "grupo": "C", "type": "fixo"}, {"date": "2026-08-18", "start": "07:00", "end": "12:00", "title": "Clínica Cirúrgica III", "loc": "HRLN", "prof": "Douglas, Vinicius, Rosyane e Giselle", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-20", "start": "08:00", "end": "12:00", "title": "Pediatria I", "loc": "UBS GOLFINHOS", "prof": "Erik", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-21", "start": "08:00", "end": "10:30", "title": "Ginecologia I", "loc": "LAB SIMULAÇÃO", "prof": "Chacon", "grupo": "C", "type": "estagio"}, {"date": "2026-08-21", "start": "16:00", "end": "18:00", "title": "Oftalmologia", "loc": "CONSULTÓRIO", "prof": "Rodrigo", "grupo": "C", "type": "estagio"}, {"date": "2026-08-25", "start": "07:00", "end": "12:00", "title": "Neurologia", "loc": "HRLN", "prof": "Gustavo", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-26", "start": "10:00", "end": "13:00", "title": "Urologia", "loc": "STELLA MARIS", "prof": "Eder", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-27", "start": "08:00", "end": "12:00", "title": "Clínica Médica III", "loc": "HRLN", "prof": "Gisele", "grupo": "C1", "type": "estagio"}, {"date": "2026-08-27", "start": "15:00", "end": "19:30", "title": "Ginecologia I", "loc": "LAB SIMULAÇÃO", "prof": "Flávio", "grupo": "C", "type": "estagio"}, {"date": "2026-08-28", "start": "16:30", "end": "18:30", "title": "Pediatria I", "loc": "LAB SIMULAÇÃO", "prof": "Joselita", "grupo": "C", "type": "estagio"}, {"date": "2026-08-31", "start": "10:00", "end": "12:30", "title": "Clínica Cirúrgica III (Téc. Cirúrgica)", "loc": "LAB. TEC. CIRURGIA", "prof": "Douglas, Vinicius e Giselle", "grupo": "C", "type": "fixo"}, {"date": "2026-09-01", "start": "08:00", "end": "10:00", "title": "Oftalmologia", "loc": "HOC", "prof": "Camila", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-03", "start": "07:00", "end": "09:30", "title": "Otorrinolaringologia", "loc": "STELLA MARIS", "prof": "Pedro e Carolina", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-03", "start": "17:00", "end": "19:00", "title": "Pediatria I", "loc": "HRLN", "prof": "Michele", "grupo": "C1.2", "type": "estagio"}, {"date": "2026-09-04", "start": "17:00", "end": "19:00", "title": "Urologia", "loc": "LAB SIMULAÇÃO", "prof": "Eder, Maciel, Paulo e Mateus", "grupo": "C", "type": "estagio"}, {"date": "2026-09-08", "start": "07:00", "end": "09:30", "title": "Otorrinolaringologia", "loc": "STELLA MARIS", "prof": "Pedro e Carolina", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-10", "start": "08:00", "end": "12:00", "title": "Clínica Médica III", "loc": "MEDVIDA", "prof": "Fernanda", "grupo": "C", "type": "estagio"}, {"date": "2026-09-11", "start": "15:00", "end": "17:00", "title": "Urologia", "loc": "LAB SIMULAÇÃO", "prof": "Eder, Maciel, Paulo e Mateus", "grupo": "C", "type": "estagio"}, {"date": "2026-09-15", "start": "07:00", "end": "12:00", "title": "Clínica Cirúrgica III", "loc": "HRLN", "prof": "Douglas, Vinicius, Rosyane e Giselle", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-18", "start": "08:00", "end": "10:30", "title": "Ginecologia I", "loc": "LAB SIMULAÇÃO", "prof": "Chacon", "grupo": "C", "type": "estagio"}, {"date": "2026-09-18", "start": "16:00", "end": "18:00", "title": "Oftalmologia", "loc": "CONSULTÓRIO", "prof": "Rodrigo", "grupo": "C", "type": "estagio"}, {"date": "2026-09-21", "start": "10:00", "end": "12:30", "title": "Clínica Cirúrgica III (Téc. Cirúrgica)", "loc": "LAB. TEC. CIRURGIA", "prof": "Douglas, Vinicius e Giselle", "grupo": "C", "type": "fixo"}, {"date": "2026-09-22", "start": "08:00", "end": "12:00", "title": "Clínica Médica III", "loc": "HRLN", "prof": "Antonio", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-22", "start": "16:00", "end": "19:30", "title": "Neurologia", "loc": "HRLN", "prof": "Arthus", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-24", "start": "08:00", "end": "12:00", "title": "Urologia", "loc": "CEMCEO", "prof": "Paulo Sérgio", "grupo": "C1", "type": "estagio"}, {"date": "2026-09-24", "start": "15:00", "end": "19:30", "title": "Ginecologia I", "loc": "LAB SIMULAÇÃO", "prof": "Flávio", "grupo": "C", "type": "estagio"}, {"date": "2026-09-25", "start": "16:30", "end": "18:30", "title": "Pediatria I", "loc": "LAB SIMULAÇÃO", "prof": "Joselita", "grupo": "C", "type": "estagio"}, {"date": "2026-10-01", "start": "07:00", "end": "09:30", "title": "Otorrinolaringologia", "loc": "STELLA MARIS", "prof": "Pedro e Carolina", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-02", "start": "17:00", "end": "19:00", "title": "Urologia", "loc": "LAB SIMULAÇÃO", "prof": "Eder, Maciel, Paulo e Mateus", "grupo": "C", "type": "estagio"}, {"date": "2026-10-05", "start": "10:00", "end": "12:30", "title": "Clínica Cirúrgica III (Téc. Cirúrgica)", "loc": "LAB. TEC. CIRURGIA", "prof": "Douglas, Vinicius e Giselle", "grupo": "C", "type": "fixo"}, {"date": "2026-10-06", "start": "07:00", "end": "09:30", "title": "Otorrinolaringologia", "loc": "STELLA MARIS", "prof": "Pedro e Carolina", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-08", "start": "08:00", "end": "12:00", "title": "Clínica Médica III", "loc": "MEDVIDA", "prof": "Fernanda", "grupo": "C", "type": "estagio"}, {"date": "2026-10-08", "start": "15:00", "end": "19:00", "title": "Pediatria I", "loc": "CONSULTÓRIO", "prof": "Elisa", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-09", "start": "15:00", "end": "17:00", "title": "Urologia", "loc": "LAB SIMULAÇÃO", "prof": "Eder, Maciel, Paulo e Mateus", "grupo": "C", "type": "estagio"}, {"date": "2026-10-15", "start": "08:00", "end": "12:00", "title": "Pediatria I", "loc": "UBS GOLFINHOS", "prof": "Erik", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-16", "start": "08:00", "end": "10:30", "title": "Ginecologia I", "loc": "LAB SIMULAÇÃO", "prof": "Chacon", "grupo": "C", "type": "estagio"}, {"date": "2026-10-16", "start": "16:00", "end": "18:00", "title": "Oftalmologia", "loc": "CONSULTÓRIO", "prof": "Rodrigo", "grupo": "C", "type": "estagio"}, {"date": "2026-10-20", "start": "07:00", "end": "12:00", "title": "Clínica Cirúrgica III", "loc": "HRLN", "prof": "Douglas, Vinicius, Rosyane e Giselle", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-22", "start": "08:00", "end": "12:00", "title": "Clínica Médica III", "loc": "HRLN", "prof": "Gisele", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-22", "start": "15:00", "end": "19:30", "title": "Ginecologia I", "loc": "LAB SIMULAÇÃO", "prof": "Flávio", "grupo": "C", "type": "estagio"}, {"date": "2026-10-23", "start": "16:30", "end": "18:30", "title": "Pediatria I", "loc": "LAB SIMULAÇÃO", "prof": "Joselita", "grupo": "C", "type": "estagio"}, {"date": "2026-10-27", "start": "07:00", "end": "12:00", "title": "Neurologia", "loc": "HRLN", "prof": "Gustavo", "grupo": "C1", "type": "estagio"}, {"date": "2026-10-30", "start": "17:00", "end": "19:00", "title": "Urologia", "loc": "LAB SIMULAÇÃO", "prof": "Eder, Maciel, Paulo e Mateus", "grupo": "C", "type": "estagio"}, {"date": "2026-11-03", "start": "08:00", "end": "10:00", "title": "Oftalmologia", "loc": "HOC", "prof": "Camila", "grupo": "C1", "type": "estagio"}, {"date": "2026-11-04", "start": "10:00", "end": "13:00", "title": "Urologia", "loc": "STELLA MARIS", "prof": "Eder", "grupo": "C1", "type": "estagio"}, {"date": "2026-11-16", "start": "10:00", "end": "12:30", "title": "Clínica Cirúrgica III (Téc. Cirúrgica)", "loc": "LAB. TEC. CIRURGIA", "prof": "Douglas, Vinicius e Giselle", "grupo": "C", "type": "fixo"}, {"date": "2026-11-29", "start": "07:00", "end": "09:30", "title": "Otorrinolaringologia", "loc": "STELLA MARIS", "prof": "Pedro e Carolina", "grupo": "C1", "type": "estagio"}]};
+  let DATA = null;
+  const CHAVE = ["", "segunda","terca","quarta","quinta","sexta",""];
+  function adaptar(d){
+    const fixed = {};
+    CHAVE.forEach((k, wd) => { if (k) fixed[String((wd+6)%7)] = d.aulas_fixas.dias[k] || []; });
+    return {
+      periodo: d.periodo,
+      fixed,
+      estagios: d.estagios.map(e => ({ date:e.data, start:e.inicio, end:e.fim, title:e.disciplina, loc:e.local, prof:e.professor, grupo:e.grupo, type: e.tipo === "pratica" ? "fixo" : "estagio" })),
+      provas: d.provas
+    };
+  }
   const WEEKDAYS = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
   const MONTHS = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 
@@ -176,7 +189,8 @@
     const wd = date.getDay(); // 0=Sun..6=Sat
     const fixedKey = String((wd+6)%7); // convert to 0=Mon..6=Sun matching python weekday()
     let items = [];
-    const fx = DATA.fixed[fixedKey];
+    const noPeriodo = iso >= DATA.periodo.inicio && iso <= DATA.periodo.fim;
+    const fx = noPeriodo ? DATA.fixed[fixedKey] : null;
     if (fx){
       fx.forEach(([start,end,title]) => {
         items.push({sort:start, html:`
@@ -198,6 +212,13 @@
           <div class="block-title">${e.title}</div>
           <div class="block-loc">${e.loc}</div>
           <span class="block-tag ${tagClass}">${tagLabel} · ${e.grupo}</span>
+        </div>`});
+    });
+    DATA.provas.filter(p => p.data === iso).forEach(p => {
+      items.push({sort:'00:00', html:`
+        <div class="block prova">
+          <div class="block-title">⚠ ${p.titulo}</div>
+          <div class="block-loc">Avaliação</div>
         </div>`});
     });
     items.sort((a,b) => a.sort.localeCompare(b.sort));
@@ -236,13 +257,16 @@
       today.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
   }
 
-  render();
+  fetch('../dados.json', { cache: 'no-cache' })
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(d => { DATA = adaptar(d); render(); })
+    .catch(() => { document.getElementById('cols').innerHTML = '<div class="empty">Não foi possível carregar dados.json.</div>'; });
 
   // re-render automatically after midnight without needing a page reload
   let lastDay = new Date().getDate();
   setInterval(() => {
     const d = new Date().getDate();
-    if (d !== lastDay){
+    if (d !== lastDay && DATA){
       lastDay = d;
       render();
     }
