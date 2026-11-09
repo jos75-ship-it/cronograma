@@ -59,9 +59,19 @@
     font-size:clamp(26px, 3.4vw, 36px); margin:4px 0 0; letter-spacing:-0.01em;
   }
   .atualizado{ font-size:12.5px; color:var(--ink-faint); }
-  .pulse{ width:100%; height:18px; margin-top:14px; }
-  .pulse svg{width:100%;height:100%;display:block;}
-  .pulse path{ fill:none; stroke:var(--estagio); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; opacity:0.5; }
+  .progresso{ margin-top:16px; }
+  .prog-rot{ display:flex; justify-content:space-between; align-items:baseline; gap:8px 16px; flex-wrap:wrap; margin-bottom:6px; }
+  .prog-rot .eyebrow{ color:var(--ink-soft); }
+  .prog-info{ font-size:13px; color:var(--ink-soft); }
+  .prog-info b{ font-family:'Source Serif 4', serif; font-size:16px; color:var(--estagio); font-weight:700; }
+  .pulse{ position:relative; width:100%; height:20px; }
+  .pulse svg{ width:100%; height:100%; display:block; overflow:visible; }
+  .pulse path{ fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+  .pulse .trilha{ stroke:var(--line); stroke-width:1.6; }
+  .pulse .feito{ stroke:var(--estagio); stroke-width:2.4; }
+  .pulse .marca{ position:absolute; top:50%; width:11px; height:11px; margin:-5.5px 0 0 -5.5px; border-radius:50%;
+    background:var(--paper); border:2.5px solid var(--estagio); box-shadow:0 0 0 3px rgba(46,125,83,.15); }
+  .pulse .fim{ position:absolute; right:0; top:50%; width:7px; height:7px; margin-top:-3.5px; border-radius:50%; background:var(--line); }
 
   .card{
     background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow);
@@ -188,8 +198,20 @@
       </div>
       <span class="atualizado" id="atualizado"></span>
     </div>
-    <div class="pulse" aria-hidden="true">
-      <svg viewBox="0 0 1160 18" preserveAspectRatio="none"><path d="M0,9 L260,9 L276,2 L292,16 L308,9 L1160,9"/></svg>
+    <div class="progresso" id="progresso" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso até as férias">
+      <div class="prog-rot">
+        <span class="eyebrow">Rumo às férias</span>
+        <span class="prog-info" id="prog-info"></span>
+      </div>
+      <div class="pulse" aria-hidden="true">
+        <svg viewBox="0 0 1160 20" preserveAspectRatio="none">
+          <defs><clipPath id="prog-clip"><rect id="prog-rect" x="0" y="-10" width="0" height="40"/></clipPath></defs>
+          <path class="trilha" d="M0,10 L260,10 L276,2 L292,18 L308,10 L1160,10"/>
+          <path class="feito" clip-path="url(#prog-clip)" d="M0,10 L260,10 L276,2 L292,18 L308,10 L1160,10"/>
+        </svg>
+        <span class="fim"></span>
+        <span class="marca" id="prog-marca"></span>
+      </div>
     </div>
   </header>
 
@@ -355,10 +377,26 @@
     $("sem-grid").innerHTML = gradeSemana(hoje);
   }
 
+  function renderProgresso(hoje){
+    const ini = deIso(D.periodo.inicio), fer = deIso(D.ferias || D.periodo.fim);
+    const total = Math.round((fer - ini) / 86400000), feitos = Math.round((hoje - ini) / 86400000);
+    const pct = Math.max(0, Math.min(100, feitos / total * 100));
+    const faltam = Math.round((fer - hoje) / 86400000);
+    $("prog-rect").setAttribute("width", (1160 * pct / 100).toFixed(1));
+    $("prog-marca").style.left = pct + "%";
+    $("progresso").setAttribute("aria-valuenow", Math.round(pct));
+    let txt;
+    if (faltam > 1) txt = "<b>" + Math.floor(pct) + "%</b> · faltam " + faltam + " dias · férias a partir de " + ddmm(fer);
+    else if (faltam === 1) txt = "<b>" + Math.floor(pct) + "%</b> · último dia! Férias amanhã";
+    else txt = "<b>100%</b> · boas férias!";
+    $("prog-info").innerHTML = txt;
+  }
+
   function renderApp(){
     const hoje = hojeAgora(), amanha = somaDias(hoje, 1);
     $("turma").textContent = D.turma;
     $("atualizado").textContent = "Dados atualizados em " + ddmm(deIso(D.atualizado)) + "/" + D.atualizado.slice(0,4);
+    renderProgresso(hoje);
     $("app").innerHTML =
       '<div class="topo"><section aria-label="Hoje e amanhã"><div class="sec-head"><h2>Hoje e amanhã</h2></div><div class="hoje-grid">' +
         cartaoDia(hoje, "Hoje", true) + cartaoDia(amanha, "Amanhã", false) + '</div></section>' + secaoProvas(hoje) + '</div>' +

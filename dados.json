@@ -1,8 +1,9 @@
 {
  "turma": "7º Período · Medicina · Sala 7 · 2026/2",
  "grupos": ["C", "C1", "C1.2"],
- "atualizado": "2026-10-19",
+ "atualizado": "2026-11-09",
  "periodo": {"inicio": "2026-08-03", "fim": "2026-12-04"},
+ "ferias": "2026-12-04",
  "aulas_fixas": {
   "local": "Sala 7",
   "dias": {
@@ -86,14 +87,14 @@
   {"data": "2026-11-05", "titulo": "Prática Ped Gp A (1,0)", "oficial": false},
   {"data": "2026-11-09", "titulo": "Prova Prática de Cirurgia", "oficial": false},
   {"data": "2026-11-09", "titulo": "Apresentação Oftalmo (0,5)", "oficial": false},
-  {"data": "2026-11-12", "titulo": "Prática Ped Gp B (1,0)", "oficial": false},
-  {"data": "2026-11-19", "titulo": "Devolver chaves do armário", "oficial": false},
+  {"data": "2026-11-12", "titulo": "Prática Ped Gp C e D (1,0)", "oficial": false},
+  {"data": "2026-11-23", "titulo": "Prova Oficial – Farmacologia (7,0)", "oficial": true},
   {"data": "2026-11-24", "titulo": "Prova Oficial – Neurologia (7,0)", "oficial": true},
-  {"data": "2026-11-25", "titulo": "Prova Oficial – Otorrino (7,0)", "oficial": true},
+  {"data": "2026-11-25", "titulo": "Prova Oficial – Otorrinolaringologia (7,0)", "oficial": true},
+  {"data": "2026-11-27", "titulo": "Prova Oficial – Urologia (7,0)", "oficial": true},
+  {"data": "2026-11-27", "titulo": "Prova Oficial – Ginecologia (7,0)", "oficial": true},
   {"data": "2026-11-30", "titulo": "Prova Oficial – Oftalmologia (7,0)", "oficial": true},
-  {"data": "2026-11-30", "titulo": "Prova Oficial – Cirurgia (7,0)", "oficial": true},
   {"data": "2026-12-02", "titulo": "Prova Oficial – Clínica Médica (7,0)", "oficial": true},
-  {"data": "2026-12-03", "titulo": "Prova Oficial – Pediatria (7,0)", "oficial": true},
-  {"data": "2026-12-04", "titulo": "Prova Oficial – Ginecologia/Obstetrícia (7,0)", "oficial": true}
+  {"data": "2026-12-03", "titulo": "Prova Oficial – Pediatria (7,0)", "oficial": true}
  ]
 }
